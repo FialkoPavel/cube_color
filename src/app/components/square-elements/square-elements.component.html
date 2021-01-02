@@ -1,0 +1,9 @@
+<div class="main-container">
+  <div *ngFor="let square of this.amountSquares">
+    <square-element-item [square]="square"
+                         (onColorChange)="setSquareRandomColor($event.toString(), path)">
+    </square-element-item>
+  </div>
+</div>
+
+<!--<button (click)="getMessages()">Send</button>-->
