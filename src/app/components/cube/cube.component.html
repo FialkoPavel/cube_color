@@ -1,0 +1,19 @@
+<div class="box-area">
+  <div class="wrap-perspective">
+    <div class="cube anim-spinnerH" [style.transform]="'rotateX(0deg)'" #cube>
+      <div *ngFor="let data of fakeData" [class]="'face ' + data[0]">
+        <div *ngFor="let square of this.amountSquares">
+          <square-element-item [square]="square"
+                               (onColorChange)="setSquareRandomColor($event.toString(), path)">
+          </square-element-item>
+<!--          <div class="inner-square" [style.backgroundColor]="square.value"></div>-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="btn-style">
+  <button class="button" type="button" (click)="stopStartCube(cube)"><span>Start/Stop</span></button>
+<!--  <button class="button" type="button" (click)="rotate(cube)">rotate</button>-->
+</div>

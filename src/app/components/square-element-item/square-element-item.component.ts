@@ -12,5 +12,6 @@ export class SquareElementItemComponent {
 
   onSquareClick(id) {
     this.onColorChange.emit(id);
+    console.log(this.square)
   }
 }

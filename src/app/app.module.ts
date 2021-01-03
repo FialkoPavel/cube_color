@@ -8,12 +8,14 @@ import {AngularFireModule} from "@angular/fire";
 import {environment} from "../environments/environment";
 import {AngularFireDatabaseModule} from "@angular/fire/database";
 import {FormsModule} from "@angular/forms";
+import {CubeComponent} from "./components/cube/cube.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     SquareElementItemComponent,
-    SquareElementsComponent
+    SquareElementsComponent,
+    CubeComponent
   ],
   imports: [
     BrowserModule,
