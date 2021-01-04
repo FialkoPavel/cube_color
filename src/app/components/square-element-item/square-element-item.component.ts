@@ -4,7 +4,7 @@ import {ISquareElement} from "../../interfaces/squre-element";
 @Component({
   selector: 'square-element-item',
   templateUrl: './square-element-item.component.html',
-  styleUrls: ['./square-element-item.component.css']
+  styleUrls: ['./square-element-item.component.css'],
 })
 export class SquareElementItemComponent {
   @Input() square: ISquareElement;
@@ -12,6 +12,5 @@ export class SquareElementItemComponent {
 
   onSquareClick(id) {
     this.onColorChange.emit(id);
-    console.log(this.square)
   }
 }

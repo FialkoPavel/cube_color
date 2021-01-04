@@ -2,12 +2,12 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ISquareElement} from "../../interfaces/squre-element";
 import {Subscription} from "rxjs";
 import {AngularFirestore} from "@angular/fire/firestore";
-import {SquareElementsComponent} from "../square-elements/square-elements.component";
+import {ResourceService} from "../../services/resource.service";
 
 @Component({
   selector: 'cube',
   templateUrl: './cube.component.html',
-  styleUrls: ['./cube.component.css']
+  styleUrls: ['./cube.component.css'],
 })
 export class CubeComponent implements OnInit, OnDestroy {
 
@@ -38,49 +38,43 @@ export class CubeComponent implements OnInit, OnDestroy {
   public path: string = 'squares';
   public amountSquares: ISquareElement[];
 
-  constructor(public db: AngularFirestore) {
-  }
+  constructor(public db: AngularFirestore, public resourceService: ResourceService) {}
 
   async ngOnInit() {
     this._subscriptions = new Subscription();
     this.amountSquares = await this._getSquareItems(this.path) || await this._setRandomSquareColors();
   }
 
-  private _getSquareItems(path: string): Promise<ISquareElement[]> {
-    return new Promise(resolve => {
-      const sub$ = this.db.collection(path)
-        .valueChanges()
-        .subscribe((squares: any) => {
-          if (squares) this.amountSquares = squares[0]?.data;
-          return resolve(squares[0]?.data);
-        })
-      this._subscriptions.add(sub$);
-    });
+  private _getSquareItems(path: string): any {
+   const sub$ = this.resourceService
+      .getData(path)
+      .subscribe((squares: any) => {
+        if (squares) this.amountSquares = squares[0]?.data;
+        return squares[0]?.data;
+    })
+    this._subscriptions.add(sub$);
   }
 
-  stopStartCube(elem) {
-   elem.className === 'cube anim-spinnerH' ? elem.className = 'cube anim-stop' : elem.className ='cube anim-spinnerH'
-  }
-
-  private async _setRandomSquareColors(): Promise<ISquareElement[]> {
+  private _setRandomSquareColors(): ISquareElement[] {
     const squares = new Array(9)
       .fill(null)
-      .map((_, idx) => ({key: `s${idx}`, value: CubeComponent._getRandomColor()}))
-    return await this._setSquareColors(squares, this.path);
+      .map((_, idx) => ({key: `s${idx}`, value: this.getRandomColor()}))
+    console.log('squares', squares)
+    return this._setSquareColors(squares, this.path);
   }
 
   setSquareRandomColor(key: string, path: string) {
     const idx: number = this.amountSquares.findIndex(el => el.key === key);
-    this.amountSquares[idx].value = CubeComponent._getRandomColor();
+    this.amountSquares[idx].value = this.getRandomColor();
     this._setSquareColors(this.amountSquares, path);
   }
 
-  private async _setSquareColors(squareCollection: ISquareElement[], path: string) {
-    await this.db.collection(path).doc(path).set({ data: squareCollection });
+  private _setSquareColors(squareCollection: ISquareElement[], path: string) {
+     this.db.collection(path).doc(path).set({ data: squareCollection });
     return squareCollection;
   }
 
-  public static _getRandomColor(): string {
+  public getRandomColor(): string {
     const letters: string = '0123456789ABCDEF';
     let color = '#';
     for (let i = 0; i < 6; i++) {
@@ -89,27 +83,8 @@ export class CubeComponent implements OnInit, OnDestroy {
     return color;
   }
 
-
-  rotate(elem) {
-    // console.log(elem.appendChild().className)
-    // elem.appendChild().className = 'cube right'
-    // const currRotateDeg: number = elem.style.transform.match(/[0-9]+/)[0];
-    // console.log(currRotateDeg)
-    // switch (+currRotateDeg) {
-    //   case 0:
-    //     elem.style.transform = 'rotateX(90deg)';
-    //     break;
-    //   case 90:
-    //     elem.style.transform = 'rotateX(180deg)';
-    //     break;
-    //   case 180:
-    //     elem.style.transform = 'rotateX(270deg)';
-    //     break;
-    //   case 270:
-    //     elem.style.transform = 'rotateX(0deg)';
-    //     break;
-    //
-    // }
+  stopStartCube(elem) {
+    elem.className = elem.className === 'cube anim-spinnerH' ? 'cube anim-stop' : 'cube anim-spinnerH';
   }
 
   ngOnDestroy(): void {

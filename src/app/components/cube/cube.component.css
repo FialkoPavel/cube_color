@@ -1,21 +1,8 @@
-/*global*/
-body{
-  padding: 100px;
-  font: 1em Arial,sans-serif;
-  background-color: #333;
-}
-/*global container*/
-.box-area{
-  /*position: relative;*/
-  /*height: auto;*/
-  /*margin-bottom: 400px;*/
-}
-/*defines the perspective*/
 .wrap-perspective{
   perspective: 800px;
   perspective-origin: 50% 100px;
 }
-/*container for all cube faces*/
+
 .cube{
   position: relative;
   width: 400px;
@@ -25,7 +12,7 @@ body{
   display: block;
   transition: all 2s;
 }
-/*generic style for cube faces*/
+
 .cube .face{
   position: absolute;
   width: 400px;
@@ -49,7 +36,6 @@ body{
   height: 100%;
   cursor: pointer;
 }
-/*cube faces*/
 .cube .back{
   transform: translateZ(-200px) rotateY(180deg);
 }
@@ -72,7 +58,7 @@ body{
 .cube .front{
   transform: translateZ(200px);
 }
-/*horizontal spinner*/
+
 @keyframes spinnerH{
   to{
     transform: rotateY(0deg);
@@ -83,7 +69,7 @@ body{
 }
 
 .anim-spinnerH{
-  animation: spinnerH 10s linear infinite;
+  animation: spinnerH 15s linear infinite;
 }
 
 .anim-stop {
