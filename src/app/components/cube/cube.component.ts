@@ -42,16 +42,15 @@ export class CubeComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this._subscriptions = new Subscription();
-    this.amountSquares = await this._getSquareItems(this.path) || await this._setRandomSquareColors();
-  }
-
-  private _getSquareItems(path: string): any {
-   const sub$ = this.resourceService
-      .getData(path)
+    const sub$ = this.resourceService
+      .getData(this.path)
       .subscribe((squares: any) => {
-        if (squares) this.amountSquares = squares[0]?.data;
-        return squares[0]?.data;
-    })
+        if(squares.length) {
+          this.amountSquares = squares[0]?.data;
+        } else {
+          this._setRandomSquareColors()
+        }
+      })
     this._subscriptions.add(sub$);
   }
 
@@ -59,7 +58,6 @@ export class CubeComponent implements OnInit, OnDestroy {
     const squares = new Array(9)
       .fill(null)
       .map((_, idx) => ({key: `s${idx}`, value: this.getRandomColor()}))
-    console.log('squares', squares)
     return this._setSquareColors(squares, this.path);
   }
 
